@@ -73,7 +73,7 @@ resize();
 
 let gameState = 'START'; 
 let score = 0;
-let credits = 45000;
+let credits = 1000000;
 let currentWave = 1;
 let enemies = [];
 let projectiles = [];
@@ -1009,7 +1009,7 @@ for (let i = 0; i < 100; i++) stars.push(new Star());
 player = new Player();
 
 function startGame() {
-    score = 0; credits = 45000; currentWave = 1;
+    score = 0; credits = 1000000; currentWave = 1;
     enemies = []; projectiles = []; particles = []; visuals = []; enemyIdCounter = 0;
     player.reset();
     gameState = 'PLAYING';
@@ -1031,7 +1031,7 @@ function startGame() {
 }
 
 function startTestMode() {
-    score = 0; credits = 45000;
+    score = 0; credits = 1000000;
     enemies = []; projectiles = []; particles = []; visuals = [];
     player.reset();
     gameState = 'PLAYING';
