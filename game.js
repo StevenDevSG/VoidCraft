@@ -25,7 +25,7 @@ const WEAPON_DATA = {
     { id: 'e4', name: 'Supernova', price: 25000, dps: 550, energy: 120, rarity: 'Legendary', color: '#f59e0b', desc: 'Experimental stellar core miniaturized into a weapon.' },
   ],
   kinetic: [
-    { id: 'k1', name: 'Auto-Cannon', price: 800, dps: 35, energy: 2, rarity: 'Common', color: '#cbd5e1', desc: 'Old school mechanical fire. High heat, high fun.' },
+    { id: 'k1', name: 'Auto-Cannon', price: 800, dps: 35, energy: 2, rarity: 'Common', color: '#cbd5e1', desc: '4-shot burst. 8 Total DMG @ 2Hz.' },
     { id: 'k2', name: 'Railgun Mk II', price: 3200, dps: 180, energy: 15, rarity: 'Rare', color: '#3b82f6', desc: 'Electromagnetic acceleration of tungsten slugs.' },
     { id: 'k3', name: 'Gatling Shredder', price: 7200, dps: 320, energy: 25, rarity: 'Epic', color: '#a855f7', desc: 'A six-barrel nightmare for any light fighter.' },
     { id: 'k4', name: 'Gravity Driver', price: 18000, dps: 480, energy: 40, rarity: 'Legendary', color: '#f59e0b', desc: 'Uses micro-singularities to crush enemy vessels.' },
@@ -121,6 +121,7 @@ class Projectile {
             if (this.weaponId === 'e1') this.damage = 10;
             if (this.weaponId === 'e2') this.damage = 40;
             if (this.weaponId === 'e3') this.damage = 15;
+            if (this.weaponId === 'k1') this.damage = 2 * (1 + (level - 1) * 0.2);
 
 
 
@@ -749,6 +750,10 @@ class Player {
                 if (id === 'e1') fireDelay = 667; 
                 if (id === 'e2') fireDelay = 1500;
                 if (id === 'e3') fireDelay = 667; 
+                if (id === 'k1') {
+                    const baseFreq = 500; // 2 bursts per second
+                    fireDelay = baseFreq / (1 + (level - 1) * 0.2);
+                }
 
 
                 if (id === 'm1') fireDelay = 3000; // Swarm
@@ -787,6 +792,16 @@ class Player {
                             this.lastSpecialShots[id] = now;
                         }
 
+                    } else if (id === 'k1') { // 4-Shot Burst
+                        for (let i = 0; i < 4; i++) {
+                            this.burstQueue.push({
+                                x: cx + (Math.random() - 0.5) * 10,
+                                y: this.y,
+                                weapon: weapon,
+                                level: level,
+                                time: now + (i * 50) // 50ms interval between burst shots
+                            });
+                        }
                     } else if (id === 'm1') {
 
  // Swarm logic
