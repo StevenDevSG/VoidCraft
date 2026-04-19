@@ -754,28 +754,16 @@ class Player {
                 if (id === 'm1') fireDelay = 3000; // Swarm
                 
                 if (now - lastFire > fireDelay) {
-                    if (id === 'e1') { // Butterfly/Alternating Burst
+                    if (id === 'e1') { // Instant Triangular Volley
                         const count = level;
                         const spread = 20;
                         const startX = cx - ((count - 1) * spread) / 2;
+                        const centerIdx = (count - 1) / 2;
                         
-                        // Calculate firing order (Center, then alternate)
-                        const mid = Math.floor(count / 2);
-                        const order = [mid];
-                        for (let i = 1; i <= mid; i++) {
-                            if (mid - i >= 0) order.push(mid - i);
-                            if (mid + i < count) order.push(mid + i);
+                        for (let i = 0; i < count; i++) {
+                            const yOffset = Math.abs(i - centerIdx) * 15;
+                            projectiles.push(new Projectile(startX + (i * spread), this.y + yOffset, weapon, level));
                         }
-                        // Remove duplicates (e.g. if count is even, mid might overlap)
-                        const uniqueOrder = [...new Set(order)];
-                        
-                        uniqueOrder.forEach((idx, i) => {
-                            this.burstQueue.push({
-                                time: now + (i * 25),
-                                x: startX + (idx * spread),
-                                weapon, level
-                            });
-                        });
                     } else if (id === 'e3') { // Lightning Logic
                         let target = null;
                         let minDist = 400; // 400px range
