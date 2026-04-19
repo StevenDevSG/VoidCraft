@@ -25,7 +25,7 @@ const WEAPON_DATA = {
     { id: 'e4', name: 'Supernova', price: 25000, dps: 550, energy: 120, rarity: 'Legendary', color: '#f59e0b', desc: 'Experimental stellar core miniaturized into a weapon.' },
   ],
   kinetic: [
-    { id: 'k1', name: 'Auto-Cannon', price: 800, dps: 35, energy: 2, rarity: 'Common', color: '#cbd5e1', desc: 'Micro-ballistics. Starts with 3-shot burst. 6 Total DMG @ 2Hz.' },
+    { id: 'k1', name: 'Auto-Cannon', price: 800, dps: 35, energy: 2, rarity: 'Common', color: '#cbd5e1', desc: 'Semi-Armor Piercing. 20 DMG Heavy Slug @ 1.5Hz.' },
     { id: 'k2', name: 'Railgun Mk II', price: 3200, dps: 180, energy: 15, rarity: 'Rare', color: '#3b82f6', desc: 'Electromagnetic acceleration of tungsten slugs.' },
     { id: 'k3', name: 'Gatling Shredder', price: 7200, dps: 320, energy: 25, rarity: 'Epic', color: '#a855f7', desc: 'A six-barrel nightmare for any light fighter.' },
     { id: 'k4', name: 'Gravity Driver', price: 18000, dps: 480, energy: 40, rarity: 'Legendary', color: '#f59e0b', desc: 'Uses micro-singularities to crush enemy vessels.' },
@@ -122,15 +122,17 @@ class Projectile {
             if (this.weaponId === 'e2') this.damage = 40;
             if (this.weaponId === 'e3') this.damage = 15;
             if (this.weaponId === 'k1') { 
-                this.damage = 2 * (1 + (level - 1) * 0.1); 
-                this.width = 1; 
-                this.height = 6;
+                this.damage = 20 * (1 + (level - 1) * 0.2); 
+                this.width = 4; 
+                this.height = 15;
+                this.ap = 0.5; // Semi-Armor Piercing
             }
 
 
 
             this.speed = (weaponData.id === 'e1' ? 6 : 10 + (level * 2));
-            if (this.weaponId === 'k1') this.speed *= 0.8;
+            if (this.weaponId === 'k1') this.speed = 10 + level; // Medium speed
+            if (this.weaponId === 'e2') this.speed = 6; // Matching Ion slow
             
             // Physical Properties
 
@@ -754,7 +756,7 @@ class Player {
                 if (id === 'e1') fireDelay = 667; 
                 if (id === 'e2') fireDelay = 1500;
                 if (id === 'e3') fireDelay = 667; 
-                if (id === 'k1') fireDelay = 500; // Fixed 2 bursts per second
+                if (id === 'k1') fireDelay = 667; // 1.5 per second
 
 
                 if (id === 'm1') fireDelay = 3000; // Swarm
@@ -793,17 +795,6 @@ class Player {
                             this.lastSpecialShots[id] = now;
                         }
 
-                    } else if (id === 'k1') { // Variable Burst Count
-                        const burstCount = 2 + level;
-                        for (let i = 0; i < burstCount; i++) {
-                            this.burstQueue.push({
-                                x: cx,
-                                y: this.y,
-                                weapon: weapon,
-                                level: level,
-                                time: now + (i * 25)
-                            });
-                        }
                     } else if (id === 'm1') {
 
  // Swarm logic
@@ -881,7 +872,7 @@ function renderShopView() {
                 <div class="card-levels">${dots}</div>
                 <div class="card-ico-box">${getWeaponIconSVG(w.id, isMaxed ? '#22d3ee' : w.color, 40)}</div>
                 <div class="card-info">
-                    h3.card-title">${w.name}</h3>
+                    <h3 class="card-title">${w.name}</h3>
                     <p class="card-rarity" style="color: ${w.color}">${w.rarity}</p>
                 </div>
                 ${isOwned ? `
