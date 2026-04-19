@@ -265,7 +265,6 @@ class Projectile {
             ctx.closePath();
             ctx.fill();
         } else {
-
             ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
         }
 
