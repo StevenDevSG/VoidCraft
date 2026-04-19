@@ -26,7 +26,7 @@ const WEAPON_DATA = {
   ],
   kinetic: [
     { id: 'k1', name: 'Auto-Cannon', price: 800, dps: 16, energy: 2, rarity: 'Common', color: '#cbd5e1', desc: 'Semi-Armor Piercing. 20 DMG Heavy Slug @ 0.8Hz.' },
-    { id: 'k2', name: 'Railgun Mk II', price: 3200, dps: 180, energy: 15, rarity: 'Rare', color: '#3b82f6', desc: 'Electromagnetic acceleration of tungsten slugs.' },
+    { id: 'k2', name: 'Railgun Mk II', price: 3200, dps: 10, energy: 15, rarity: 'Rare', color: '#60a5fa', desc: 'SAP Penetrator. 20 DMG Slugs that pierce all targets.' },
     { id: 'k3', name: 'Gatling Shredder', price: 7200, dps: 320, energy: 25, rarity: 'Epic', color: '#a855f7', desc: 'A six-barrel nightmare for any light fighter.' },
     { id: 'k4', name: 'Gravity Driver', price: 18000, dps: 480, energy: 40, rarity: 'Legendary', color: '#f59e0b', desc: 'Uses micro-singularities to crush enemy vessels.' },
   ],
@@ -127,6 +127,11 @@ class Projectile {
                 this.height = 15;
                 this.ap = 0.5; // Semi-Armor Piercing
             }
+            if (this.weaponId === 'k2') { 
+                this.damage = 20 * (1 + (level - 1) * 0.2); 
+                this.width = 4;
+                this.ap = 0.5; // SAP
+            }
 
 
 
@@ -159,7 +164,7 @@ class Projectile {
 
 
             case 'e4': this.width = 15; this.height = 15; this.speed = 5; break; // Supernova
-            case 'k2': this.height = 1000; this.speed = 0; this.life = 5; break; // Railgun inf
+            case 'k2': this.height = 1000; this.speed = 0; this.life = 40; this.maxLife = 40; break; // Railgun - Persistent Beam
             case 'm1': this.width = 4; this.height = 4; this.speed = 12; break; // Swarm
             case 'm2': this.width = 12; this.height = 20; break; // Torpedo
             case 'm4': this.width = 60; this.height = 60; this.speed = 2; break; // Reaper
@@ -256,6 +261,13 @@ class Projectile {
             ctx.strokeStyle = "#fff";
             ctx.lineWidth = 1;
             ctx.stroke();
+        } else if (this.weaponId === 'k2') { // Railgun Fading Beam
+            ctx.globalAlpha = this.life / this.maxLife;
+            ctx.fillStyle = this.color;
+            ctx.fillRect(-this.width/2, -this.height, this.width, this.height);
+            // Hot Core
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(-this.width/4, -this.height, this.width/2, this.height);
         } else if (this.weaponId === 'k1') { // Doubled Arrow-head Kinetic Shell
             ctx.fillRect(-this.width/2, 0, this.width, this.height / 2); // Body
             ctx.beginPath(); // Massive Arrow head tip (100% Increase)
@@ -766,6 +778,7 @@ class Player {
                 if (id === 'e2') fireDelay = 1500;
                 if (id === 'e3') fireDelay = 667; 
                 if (id === 'k1') fireDelay = 1250; // 0.8 per second
+                if (id === 'k2') fireDelay = 2000 / (1 + (level - 1) * 0.1); // 0.5 Hz +10% per level
 
 
                 if (id === 'm1') fireDelay = 3000; // Swarm
@@ -1196,7 +1209,7 @@ function update() {
                         score += e.scoreVal; 
                         credits += e.creditVal; 
                     }
-                    break;
+                    if (p.weaponId !== 'k2') break; // Penetrate everything if k2
 
                 }
             }
