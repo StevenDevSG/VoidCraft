@@ -256,12 +256,12 @@ class Projectile {
             ctx.strokeStyle = "#fff";
             ctx.lineWidth = 1;
             ctx.stroke();
-        } else if (this.weaponId === 'k1') { // Arrow-head Kinetic Shell
-            ctx.fillRect(-this.width/2, -2, this.width, this.height - 3); // Main body
-            ctx.beginPath(); // Arrow head tip
-            ctx.moveTo(-this.width/2 - 1, -2);
-            ctx.lineTo(this.width/2 + 1, -2);
-            ctx.lineTo(0, -this.height/2 - 2);
+        } else if (this.weaponId === 'k1') { // Doubled Arrow-head Kinetic Shell
+            ctx.fillRect(-this.width/2, 0, this.width, this.height / 2); // Body
+            ctx.beginPath(); // Massive Arrow head tip (100% Increase)
+            ctx.moveTo(-this.width - 2, 0);
+            ctx.lineTo(this.width + 2, 0);
+            ctx.lineTo(0, -this.height);
             ctx.closePath();
             ctx.fill();
         } else {
