@@ -636,21 +636,22 @@ class Player {
             
             // Outer glow
             ctx.shadowBlur = 40;
-            ctx.shadowColor = "#f59e0b";
+            ctx.shadowColor = "#f59e0b"; // Orange
             
             const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.supernovaR);
-            grad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
-            grad.addColorStop(0.5, 'rgba(245, 158, 11, 0.4)');
-            grad.addColorStop(1, 'rgba(251, 191, 36, 0.8)');
+            grad.addColorStop(0, 'rgba(245, 158, 11, 0)'); // Transparent core
+            grad.addColorStop(0.7, 'rgba(245, 158, 11, 0.4)'); // Orange outline
+            grad.addColorStop(1, 'rgba(251, 191, 36, 0.8)'); // Yellow edge
             
             ctx.fillStyle = grad;
             ctx.beginPath();
             ctx.arc(0, 0, this.supernovaR, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.strokeStyle = "#fbbf24";
+            ctx.strokeStyle = "#fbbf24"; // Yellow outline
             ctx.lineWidth = 4;
             ctx.stroke();
+
             
             ctx.restore();
         }
@@ -1067,7 +1068,10 @@ function spawnWave() {
 
 function gameOver() {
     gameState = 'GAMEOVER';
-    gameoverScreen.style.display = 'flex'; shopBtnHUD.style.display = 'none';
+    gameoverScreen.style.display = 'flex'; 
+    shopBtnHUD.style.display = 'none';
+    if (supernovaBtn) supernovaBtn.style.display = 'none';
+
     document.getElementById('final-stats').innerText = `COMBAT SCORE: ${score.toLocaleString()}\nCREDITS POOLED: ${credits.toLocaleString()}\nSECTORS CLEARED: ${currentWave - 1}`;
 }
 
