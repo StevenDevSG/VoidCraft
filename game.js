@@ -7,8 +7,8 @@ const gameoverScreen = document.getElementById('gameover-screen');
 const closeShopBtn = document.getElementById('close-shop-btn');
 const shopCreditsText = document.getElementById('shop-credits-display');
 const testBtnHUD = document.getElementById('test-btn');
-const pauseBtnHUD = document.getElementById('pause-btn');
 const supernovaBtn = document.getElementById("supernova-btn");
+
 const supernovaBtnText = document.getElementById("supernova-btn-text");
 const supernovaChargeFill = document.getElementById("supernova-charge-fill");
 
@@ -1020,7 +1020,7 @@ function startGame() {
     startScreen.style.display = 'none'; gameoverScreen.style.display = 'none';
     shopBtnHUD.style.display = 'block';
     testBtnHUD.style.display = 'block';
-    pauseBtnHUD.style.display = 'block';
+
     spawnWave();
 
 
@@ -1041,7 +1041,7 @@ function startTestMode() {
     gameState = 'PLAYING';
     startScreen.style.display = 'none'; gameoverScreen.style.display = 'none';
     shopBtnHUD.style.display = 'block'; testBtnHUD.style.display = 'block';
-    pauseBtnHUD.style.display = 'block';
+
 
     
     // Spawn Target Baracuda
@@ -1108,12 +1108,14 @@ function update() {
         document.getElementById('scoreHUD').innerText = `SCORE: ${score.toLocaleString()}`;
         document.getElementById('scoreHUD').style.display = 'block';
 
-        // Update DOM HP
-        const hpFill = document.getElementById('hp-fill');
-        const hpPct = (player.hp / player.maxHp) * 100;
-        hpFill.style.width = `${Math.max(0, hpPct)}%`;
-        hpFill.style.backgroundColor = player.hp < 10 ? "#ef4444" : "#22d3ee";
-        document.getElementById('hp-container').style.display = 'block';
+    const hpFill = document.getElementById('hp-fill');
+    const hpText = document.getElementById('hp-text');
+    const hpPct = (player.hp / player.maxHp) * 100;
+    hpFill.style.width = `${Math.max(0, hpPct)}%`;
+    hpFill.style.backgroundColor = player.hp < 10 ? "#ef4444" : "#22d3ee";
+    if (hpText) hpText.innerText = `${Math.ceil(Math.max(0, player.hp))}/${player.maxHp}`;
+    document.getElementById('hp-wrapper').style.display = 'flex';
+
 
 
 
@@ -1248,16 +1250,14 @@ function draw() {
 shopBtnHUD.onclick = () => { if (gameState === 'PLAYING') { gameState = 'SHOP'; shopScreen.style.display = 'flex'; renderHub(); } };
 
 testBtnHUD.onclick = () => { startTestMode(); };
-pauseBtnHUD.onclick = () => { togglePause(); };
 closeShopBtn.onclick = () => { gameState = 'PLAYING'; shopScreen.style.display = 'none'; };
+
 
 function togglePause() {
     if (gameState === 'PLAYING') {
         gameState = 'PAUSED';
-        pauseBtnHUD.innerText = 'RESUME';
     } else if (gameState === 'PAUSED') {
         gameState = 'PLAYING';
-        pauseBtnHUD.innerText = 'PAUSE';
     }
 }
 
