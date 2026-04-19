@@ -23,10 +23,10 @@ const WEAPON_DATA = {
 
 
     { id: 'e4', name: 'Supernova', price: 25000, dps: 550, energy: 120, rarity: 'Legendary', color: '#f59e0b', desc: 'Experimental stellar core miniaturized into a weapon.' },
+    { id: 'e5', name: 'Beam Laser', price: 3200, dps: 10, energy: 15, rarity: 'Rare', color: '#10b981', desc: 'Sustained energy beam. 20 DMG Slugs that pierce all targets.' },
   ],
   kinetic: [
     { id: 'k1', name: 'Auto-Cannon', price: 800, dps: 16, energy: 2, rarity: 'Common', color: '#cbd5e1', desc: 'Semi-Armor Piercing. 20 DMG Heavy Slug @ 0.8Hz.' },
-    { id: 'k2', name: 'Railgun Mk II', price: 3200, dps: 10, energy: 15, rarity: 'Rare', color: '#60a5fa', desc: 'SAP Penetrator. 20 DMG Slugs that pierce all targets.' },
     { id: 'k3', name: 'Gatling Shredder', price: 7200, dps: 320, energy: 25, rarity: 'Epic', color: '#a855f7', desc: 'A six-barrel nightmare for any light fighter.' },
     { id: 'k4', name: 'Gravity Driver', price: 18000, dps: 480, energy: 40, rarity: 'Legendary', color: '#f59e0b', desc: 'Uses micro-singularities to crush enemy vessels.' },
   ],
@@ -47,8 +47,8 @@ function getWeaponIconSVG(id, color, size = 32) {
         case 'e2': content = `<circle cx="12" cy="12" r="8" stroke-dasharray="4 2" ${stroke}/><circle cx="12" cy="12" r="3" fill="${color}" stroke="none" />`; break;
         case 'e3': content = `<path d="M3 12c3-4 6 4 9 0s6-4 9 0" ${stroke}/><path d="M3 14c3-4 6 4 9 0s6-4 9 0" opacity="0.5" ${stroke}/>`; break;
         case 'e4': content = `<path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19" opacity="0.3" ${stroke}/><circle cx="12" cy="12" r="4" fill="${color}" stroke="none" /><circle cx="12" cy="12" r="6" stroke-width="1" ${stroke}/>`; break;
+        case 'e5': content = `<path d="M3 8h18M3 16h18" stroke-width="2" ${stroke}/><rect x="10" y="10" width="6" height="4" fill="${color}" stroke="none" />`; break;
         case 'k1': content = `<rect x="4" y="9" width="12" height="6" rx="1" ${stroke}/><path d="M16 11h4M16 13h4" ${stroke}/>`; break;
-        case 'k2': content = `<path d="M3 8h18M3 16h18" stroke-width="2" ${stroke}/><rect x="10" y="10" width="6" height="4" fill="${color}" stroke="none" />`; break;
         case 'k3': content = `<circle cx="9" cy="9" r="2" fill="${color}" stroke="none" /><circle cx="15" cy="9" r="2" fill="${color}" stroke="none" /><circle cx="12" cy="12" r="2" fill="${color}" stroke="none" /><circle cx="9" cy="15" r="2" fill="${color}" stroke="none" /><circle cx="15" cy="15" r="2" fill="${color}" stroke="none" /><circle cx="12" cy="12" r="8" stroke-width="1" ${stroke}/>`; break;
         case 'k4': content = `<path d="M12 3a9 9 0 0 0-9 9M12 21a9 9 0 0 0 9-9" opacity="0.4" ${stroke}/><path d="M8 12a4 4 0 0 1 8 0" ${stroke}/><rect x="11" y="11" width="2" height="2" fill="${color}" stroke="none" />`; break;
         case 'm1': content = `<path d="M6 8l3-3 3 3M12 16l3-3 3 3M6 18l3-3 3 3" ${stroke}/>`; break;
@@ -127,7 +127,7 @@ class Projectile {
                 this.height = 15;
                 this.ap = 0.5; // Semi-Armor Piercing
             }
-            if (this.weaponId === 'k2') { 
+            if (this.weaponId === 'e5') { 
                 this.damage = 20 * (1 + (level - 1) * 0.2); 
                 this.width = 4;
                 this.height = 1000;
@@ -165,7 +165,7 @@ class Projectile {
 
 
             case 'e4': this.width = 15; this.height = 15; this.speed = 5; break; // Supernova
-            case 'k2': this.height = 1000; this.speed = 0; this.life = 40; this.maxLife = 40; break; // Railgun - Persistent Beam
+            case 'e5': this.height = 1000; this.speed = 0; this.life = 40; this.maxLife = 40; break; // Beam Laser - Persistent
             case 'm1': this.width = 4; this.height = 4; this.speed = 12; break; // Swarm
             case 'm2': this.width = 12; this.height = 20; break; // Torpedo
             case 'm4': this.width = 60; this.height = 60; this.speed = 2; break; // Reaper
@@ -181,7 +181,7 @@ class Projectile {
             this.updateSeeking(occupiedTargetIds);
         }
 
-        if (this.weaponId === 'e3' || this.weaponId === 'k2') { // Beam weapons stick to player
+        if (this.weaponId === 'e3' || this.weaponId === 'e5') { // Beam weapons stick to player
             this.x = player.x + player.width/2;
             this.y = player.y + 3; // Locked to exact visual tip
         } else {
@@ -262,7 +262,7 @@ class Projectile {
             ctx.strokeStyle = "#fff";
             ctx.lineWidth = 1;
             ctx.stroke();
-        } else if (this.weaponId === 'k2') { // Railgun Fading Beam
+        } else if (this.weaponId === 'e5') { // Beam Laser Fading Beam
             ctx.globalAlpha = this.life / this.maxLife;
             ctx.fillStyle = this.color;
             ctx.fillRect(-this.width/2, -this.height, this.width, this.height);
@@ -779,7 +779,7 @@ class Player {
                 if (id === 'e2') fireDelay = 1500;
                 if (id === 'e3') fireDelay = 667; 
                 if (id === 'k1') fireDelay = 1250; // 0.8 per second
-                if (id === 'k2') fireDelay = 2000 / (1 + (level - 1) * 0.1); // 0.5 Hz +10% per level
+                if (id === 'e5') fireDelay = 2000 / (1 + (level - 1) * 0.1); // 0.5 Hz +10% per level
 
 
                 if (id === 'm1') fireDelay = 3000; // Swarm
@@ -1157,8 +1157,8 @@ function update() {
                 let e = enemies[j];
                 let hit = false;
                 
-                if (p.weaponId === 'k2') {
-                    // Line-based collision for Railgun
+                if (p.weaponId === 'e5') {
+                    // Line-based collision for Beam Laser
                     hit = Math.abs(p.x - (e.x + e.width/2)) < (e.width/2 + p.width/2) &&
                           e.y + e.height > p.y - p.height && e.y < p.y;
                 } else {
@@ -1212,13 +1212,13 @@ function update() {
 
 
 
-                    if (p.weaponId !== 'k2' && p.weaponId !== 'e3') p.active = false; 
+                    if (p.weaponId !== 'e5' && p.weaponId !== 'e3') p.active = false; 
                     if (e.hp <= 0 && !e.dying) { 
                         e.dying = true;
                         score += e.scoreVal; 
                         credits += e.creditVal; 
                     }
-                    if (p.weaponId !== 'k2') break; // Penetrate everything if k2
+                    if (p.weaponId !== 'e5') break; // Penetrate everything if Beam Laser
 
                 }
             }
