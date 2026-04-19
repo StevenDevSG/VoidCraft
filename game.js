@@ -9,6 +9,7 @@ const shopCreditsText = document.getElementById('shop-credits-display');
 const testBtnHUD = document.getElementById('test-btn');
 const pauseBtnHUD = document.getElementById('pause-btn');
 const supernovaBtn = document.getElementById("supernova-btn");
+const supernovaBtnText = document.getElementById("supernova-btn-text");
 const supernovaChargeFill = document.getElementById("supernova-charge-fill");
 
 
@@ -240,8 +241,7 @@ class Projectile {
                 let px = (tx / segments) * i + (Math.random() - 0.5) * 30;
                 let py = (ty / segments) * i + (Math.random() - 0.5) * 30;
                 if (i === segments) { px = tx; py = ty; }
-                ctx.lineTo(px, ty); // Typo here usually ty or py? py. 
-                // Using py: ctx.lineTo(px, py);
+                ctx.lineTo(px, py);
             }
             ctx.stroke();
             
@@ -667,6 +667,9 @@ class Player {
         const dt = 16.6; // Approximating 60fps
         if (gameState === 'PLAYING' && this.inventory['e4'] && !this.disabledWeapons.has('e4')) {
             supernovaBtn.style.display = 'flex';
+            const weapon = WEAPON_DATA.energy.find(w => w.id === 'e4');
+            if (weapon && supernovaBtnText) supernovaBtnText.innerText = weapon.name.toUpperCase();
+
 
             if (this.supernovaActive) {
                 this.supernovaTimer -= dt;
