@@ -12,12 +12,16 @@
 <body>
 <div id="game-container">
     <canvas id="gameCanvas"></canvas>
-    <div id="legendary-btn-container" style="position: absolute; bottom: 30px; left: 20px; z-index: 600;">
+    <div id="legendary-btn-container" style="position: absolute; bottom: 30px; left: 20px; z-index: 600; display: flex; flex-direction: column; gap: 8px;">
 
-        <button id="supernova-btn" class="hud-btn legendary-pulse" style="display:none; min-width: 140px; height: 40px; background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; color: #f59e0b; padding: 0 15px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; border-radius: 4px; cursor: pointer; position: relative; overflow: hidden; align-items: center; justify-content: center; transition: all 0.3s ease;">
+        <button id="supernova-btn" class="hud-btn legendary-pulse" style="display:none; min-width: 98px; height: 28px; background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; color: #f59e0b; padding: 0 10px; font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; cursor: pointer; position: relative; overflow: hidden; align-items: center; border-radius: 4px; transition: all 0.3s ease;">
             <div id="supernova-charge-fill" style="position: absolute; bottom: 0; left: 0; width: 0%; height: 100%; background: rgba(245, 158, 11, 0.3); transition: width 0.1s linear;"></div>
-            <span id="supernova-btn-text" style="position: relative; z-index: 2;">SUPERNOVA</span>
+            <div style="position: relative; z-index: 2; display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 8px;">
+                <span id="supernova-btn-text">SUPERNOVA</span>
+                <span style="background: rgba(0,0,0,0.5); padding: 2px 4px; border-radius: 2px; font-size: 7px; border: 1px solid rgba(245, 158, 11, 0.6); color: #fbbf24;">[1]</span>
+            </div>
         </button>
+
     </div>
 
 

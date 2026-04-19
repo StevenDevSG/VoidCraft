@@ -566,7 +566,7 @@ class Player {
     }
 
     activateSupernova() {
-        if (this.supernovaCharge >= this.supernovaMaxCharge && !this.supernovaActive) {
+        if (this.inventory['e4'] && !this.disabledWeapons.has('e4') && this.supernovaCharge >= this.supernovaMaxCharge && !this.supernovaActive) {
             this.supernovaActive = true;
             this.supernovaTimer = 2000; // 2 seconds
             this.supernovaR = 0;
@@ -991,7 +991,15 @@ window.addEventListener('keydown', e => {
             shopScreen.style.display = 'none';
         }
     }
+    
+    // Quick-action Legendary Hotkeys
+    if (gameState === 'PLAYING' && player) {
+        if (e.key === '1') player.activateSupernova(); 
+        // if (e.key === '2') player.activateLegendaryTwo(); // Reserved for future
+        // if (e.key === '3') player.activateLegendaryThree(); // Reserved for future
+    }
 });
+
 
 window.addEventListener('keyup', e => keys[e.key] = false);
 
