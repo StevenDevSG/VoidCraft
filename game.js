@@ -130,6 +130,7 @@ class Projectile {
             if (this.weaponId === 'k2') { 
                 this.damage = 20 * (1 + (level - 1) * 0.2); 
                 this.width = 4;
+                this.height = 1000;
                 this.ap = 0.5; // SAP
             }
 
@@ -141,7 +142,7 @@ class Projectile {
             
             // Physical Properties
 
-            this.width = (this.width || 4); this.height = (this.height || 12);
+            this.width = 4; this.height = 12;
             this.vx = 0; this.vy = -this.speed;
             this.angle = -Math.PI / 2;
             this.life = 500; // frames (Ensures slow projectiles reach edges)
@@ -180,9 +181,9 @@ class Projectile {
             this.updateSeeking(occupiedTargetIds);
         }
 
-        if (this.weaponId === 'e3') { // Beam sticks to player
+        if (this.weaponId === 'e3' || this.weaponId === 'k2') { // Beam weapons stick to player
             this.x = player.x + player.width/2;
-            this.y = player.y + 5; // Locked to visual tip
+            this.y = player.y + 3; // Locked to exact visual tip
         } else {
             this.x += this.vx;
             this.y += this.vy;
@@ -755,7 +756,7 @@ class Player {
     handleWeaponSystems() {
         const now = Date.now(); 
         const cx = this.x + this.width / 2;
-        const cy = this.y + 5; // Tactical Firing Point (Ship Tip)
+        const cy = this.y + 3; // Tactical Firing Point (Matches VisTip)
         
         Object.keys(this.inventory).forEach(id => {
             const level = this.inventory[id];
@@ -1154,8 +1155,16 @@ function update() {
             if (!p.active) { projectiles.splice(i, 1); continue; }
             for (let j = enemies.length - 1; j >= 0; j--) {
                 let e = enemies[j];
-                const dist = Math.hypot(p.x - (e.x + e.width/2), p.y - (e.y + e.height/2));
-                const hit = dist < (e.width/2 + p.width/2);
+                let hit = false;
+                
+                if (p.weaponId === 'k2') {
+                    // Line-based collision for Railgun
+                    hit = Math.abs(p.x - (e.x + e.width/2)) < (e.width/2 + p.width/2) &&
+                          e.y + e.height > p.y - p.height && e.y < p.y;
+                } else {
+                    const dist = Math.hypot(p.x - (e.x + e.width/2), p.y - (e.y + e.height/2));
+                    hit = dist < (e.width/2 + p.width/2);
+                }
                 
                 if (hit) {
                     e.hp -= p.damage;
