@@ -256,6 +256,14 @@ class Projectile {
             ctx.strokeStyle = "#fff";
             ctx.lineWidth = 1;
             ctx.stroke();
+        } else if (this.weaponId === 'k1') { // Arrow-head Kinetic Shell
+            ctx.fillRect(-this.width/2, -2, this.width, this.height - 3); // Main body
+            ctx.beginPath(); // Arrow head tip
+            ctx.moveTo(-this.width/2 - 1, -2);
+            ctx.lineTo(this.width/2 + 1, -2);
+            ctx.lineTo(0, -this.height/2 - 2);
+            ctx.closePath();
+            ctx.fill();
         } else {
 
             ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
