@@ -177,7 +177,7 @@ class Projectile {
 
         if (this.weaponId === 'e3') { // Beam sticks to player
             this.x = player.x + player.width/2;
-            this.y = player.y - 40;
+            this.y = player.y + 5; // Locked to visual tip
         } else {
             this.x += this.vx;
             this.y += this.vy;
@@ -741,7 +741,9 @@ class Player {
     }
 
     handleWeaponSystems() {
-        const now = Date.now(); const cx = this.x + this.width / 2;
+        const now = Date.now(); 
+        const cx = this.x + this.width / 2;
+        const cy = this.y + 5; // Tactical Firing Point (Ship Tip)
         
         Object.keys(this.inventory).forEach(id => {
             const level = this.inventory[id];
@@ -777,7 +779,7 @@ class Player {
                         
                         for (let i = 0; i < count; i++) {
                             const yOffset = Math.abs(i - centerIdx) * 15;
-                            projectiles.push(new Projectile(startX + (i * spread), this.y + yOffset, weapon, level));
+                            projectiles.push(new Projectile(startX + (i * spread), cy + yOffset, weapon, level));
                         }
                     } else if (id === 'e3') { // Lightning Logic
                         let target = null;
@@ -785,12 +787,12 @@ class Player {
                         let minDist = arcRange;
                         enemies.forEach(e => {
                             if (e.dying) return;
-                            const d = Math.hypot(cx - (e.x + e.width/2), this.y - (e.y + e.height/2));
+                            const d = Math.hypot(cx - (e.x + e.width/2), cy - (e.y + e.height/2));
                             if (d < minDist) { minDist = d; target = e; }
                         });
                         
                         if (target) {
-                            const p = new Projectile(cx, this.y, weapon, level);
+                            const p = new Projectile(cx, cy, weapon, level);
                             p.target = target;
                             projectiles.push(p);
                             target.hp -= 15; // Specific damage: 15
@@ -807,14 +809,14 @@ class Player {
  // Swarm logic
 
                         for(let i=0; i<8; i++) {
-                            const p = new Projectile(cx, this.y, weapon, level);
+                            const p = new Projectile(cx, cy, weapon, level);
                             p.angle = -Math.PI/2 + (i - 3.5) * 0.2;
                             p.vx = Math.cos(p.angle) * p.speed;
                             p.vy = Math.sin(p.angle) * p.speed;
                             projectiles.push(p);
                         }
                     } else {
-                        projectiles.push(new Projectile(cx, this.y, weapon, level));
+                        projectiles.push(new Projectile(cx, cy, weapon, level));
                     }
                     this.lastSpecialShots[id] = now;
                     if (id.startsWith('k')) this.screenShake = 5;
