@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VoidCraft - Elite Command</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+    <div id="legendary-btn-container" style="position: absolute; bottom: 30px; right: 20px; z-index: 600;">
+
+        <button id="supernova-btn" class="hud-btn legendary-pulse" style="display:none; min-width: 140px; height: 40px; background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; color: #f59e0b; padding: 0 15px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; border-radius: 4px; cursor: pointer; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+            <div id="supernova-charge-fill" style="position: absolute; bottom: 0; left: 0; width: 0%; height: 100%; background: rgba(245, 158, 11, 0.3); transition: width 0.1s linear;"></div>
+            <span style="position: relative; z-index: 2;">LEGENDARY WEAPON</span>
+        </button>
+    </div>
+
+    
+    <div id="hud-top-right" style="position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; z-index: 500;">
+        <div id="hp-container" style="display: none; width: 100px; height: 6px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); margin-right: 10px; position: relative; overflow: hidden; border-radius: 3px;">
+            <div id="hp-fill" style="width: 100%; height: 100%; background: #22d3ee; transition: width 0.3s ease-out;"></div>
+        </div>
+        <div id="scoreHUD" style="color:#fff; font-family:Inter; font-weight:900; font-size:12px; margin-right: 15px; letter-spacing: 1px; display: none;">SCORE: 0</div>
+        <button id="pause-btn" style="display:none;">PAUSE</button>
+        <button id="test-btn" style="display:none;">TEST</button>
+        <button id="shop-btn" style="display:none;">HANGAR</button>
+    </div>
+
+
+
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="ui-layer">
+        <h1 class="neon-pulse">VOID CRAFT</h1>
+        <button class="btn" id="startBtn">Initiate Warp</button>
+
+        <div class="version-tag">SYSTEM v2.0.0-CORE</div>
+    </div>
+    <!-- New Armory Hub (Replacing Systems Armory) -->
+    <div id="shop-screen" class="ui-layer" style="display: none;">
+        <div class="armory-hub-container">
+            <!-- Header -->
+            <header class="hub-header">
+                <div class="hub-title-box">
+                    <h1 class="hub-title">ARMORY HUB</h1>
+                </div>
+                
+                <div class="header-right-col">
+                    <div class="hub-credits-card">
+                        <div class="credit-pulse"></div>
+                        <span class="credit-val">
+                            <span id="shop-credits-display">0</span> <span class="cr-tag">CR</span>
+                        </span>
+                    </div>
+                    <button class="hub-close-btn-header" id="close-shop-btn">CLOSE HUB</button>
+                </div>
+            </header>
+            <!-- Nav Tabs -->
+            <nav class="hub-nav">
+                <button class="nav-tab active" data-tab="shop">WEAPON</button>
+                <button class="nav-tab" data-tab="ability">ABILITY</button>
+                <button class="nav-tab" data-tab="hangar">HANGAR VAULT <span id="hangar-count">(0)</span></button>
+                <div class="nav-indicator"></div>
+            </nav>
+            <!-- Main Content Area -->
+            <main class="hub-content no-scrollbar" id="hub-main">
+                <!-- Shop View -->
+                <div id="view-shop" class="hub-view">
+                    <!-- Sections (Kinetic, Energy, Missile) injected by JS -->
+                </div>
+                <!-- Ability View (Locked) -->
+                <div id="view-ability" class="hub-view" style="display:none">
+                    <div class="locked-state">
+                        <div class="locked-ico">⚙️</div>
+                        <h2 class="locked-title">ABILITY SYSTEMS</h2>
+                        <p class="locked-desc">Strategic ability modules currently in development.</p>
+                    </div>
+                </div>
+                <!-- Hangar View (Inventory) -->
+                <div id="view-hangar" class="hub-view" style="display:none">
+                    <div class="manifest-header">
+                        <h2 class="manifest-title">WEAPON MANIFEST</h2>
+                        <div class="manifest-line"></div>
+                    </div>
+                    <div id="hangar-grid" class="hangar-grid">
+                        <!-- Inventory items injected by JS -->
+                    </div>
+                </div>
+            </main>
+            <div class="hub-scanline"></div>
+        </div>
+    </div>
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="ui-layer" style="display: none;">
+        <h1 style="color:var(--hull-low); letter-spacing: 6px;">CORE BREACH</h1>
+        <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid var(--hull-low);">
+            <p id="final-stats" style="color: #fff; font-weight: bold; margin: 0; line-height: 1.6;"></p>
+        </div>
+        <button class="btn" id="restartBtn" style="border-color: var(--hull-low); color: var(--hull-low); box-shadow: 0 0 20px rgba(255, 0, 85, 0.2);">System Reboot</button>
+        <div class="version-tag">STATION RELAY OFFLINE</div>
+    </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
