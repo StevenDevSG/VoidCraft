@@ -766,7 +766,8 @@ class Player {
                         }
                     } else if (id === 'e3') { // Lightning Logic
                         let target = null;
-                        let minDist = 400; // 400px range
+                        const arcRange = 400 + (level - 1) * 100;
+                        let minDist = arcRange;
                         enemies.forEach(e => {
                             if (e.dying) return;
                             const d = Math.hypot(cx - (e.x + e.width/2), this.y - (e.y + e.height/2));
