@@ -197,6 +197,7 @@ canvas {
 
 
 
+
 /* Shop Grid */
 /* Armory Hub - 600x1000 optimized */
 .armory-hub-container {
@@ -581,7 +582,7 @@ h1 {
 .card-mount-status { width: 100%; display: flex; justify-content: center; margin-top: 5px; margin-bottom: 8px; }
 
 .mount-toggle { background: none; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); font-size: 8px; font-weight: 900; padding: 3px 10px; border-radius: 12px; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; }
-.mount-toggle.on { border-color: #22d3ee; color: #22d3ee; background: rgba(34, 211, 238, 0.1); box-shadow: 0 0 100px rgba(34, 211, 238, 0.1); }
+.mount-toggle.on { border-color: #22d3ee; color: #22d3ee; background: rgba(34, 211, 238, 0.1); box-shadow: 0 0 10px rgba(34, 211, 238, 0.1); }
 .mount-toggle.off { border-color: #f43f5e; color: #f43f5e; background: rgba(244, 63, 94, 0.1); }
 
 .item-status-tag { font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 4px; letter-spacing: 1px; }
