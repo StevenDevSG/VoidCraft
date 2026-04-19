@@ -25,7 +25,7 @@ const WEAPON_DATA = {
     { id: 'e4', name: 'Supernova', price: 25000, dps: 550, energy: 120, rarity: 'Legendary', color: '#f59e0b', desc: 'Experimental stellar core miniaturized into a weapon.' },
   ],
   kinetic: [
-    { id: 'k1', name: 'Auto-Cannon', price: 800, dps: 35, energy: 2, rarity: 'Common', color: '#cbd5e1', desc: 'Semi-Armor Piercing. 20 DMG Heavy Slug @ 1.5Hz.' },
+    { id: 'k1', name: 'Auto-Cannon', price: 800, dps: 16, energy: 2, rarity: 'Common', color: '#cbd5e1', desc: 'Semi-Armor Piercing. 20 DMG Heavy Slug @ 0.8Hz.' },
     { id: 'k2', name: 'Railgun Mk II', price: 3200, dps: 180, energy: 15, rarity: 'Rare', color: '#3b82f6', desc: 'Electromagnetic acceleration of tungsten slugs.' },
     { id: 'k3', name: 'Gatling Shredder', price: 7200, dps: 320, energy: 25, rarity: 'Epic', color: '#a855f7', desc: 'A six-barrel nightmare for any light fighter.' },
     { id: 'k4', name: 'Gravity Driver', price: 18000, dps: 480, energy: 40, rarity: 'Legendary', color: '#f59e0b', desc: 'Uses micro-singularities to crush enemy vessels.' },
@@ -765,7 +765,7 @@ class Player {
                 if (id === 'e1') fireDelay = 667; 
                 if (id === 'e2') fireDelay = 1500;
                 if (id === 'e3') fireDelay = 667; 
-                if (id === 'k1') fireDelay = 667; // 1.5 per second
+                if (id === 'k1') fireDelay = 1250; // 0.8 per second
 
 
                 if (id === 'm1') fireDelay = 3000; // Swarm
